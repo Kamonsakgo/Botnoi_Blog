@@ -1,0 +1,213 @@
+openapi: 3.0.0
+info:
+  title: Ads API
+  description: API for managing advertisements
+  version: 1.0.0
+servers:
+  - url: http://localhost:7300/api/ads
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - BearerAuth: []
+paths:
+  /insert_ads:
+    post:
+      summary: Insert
+      description: Inserts a new advertisement with an image file
+      tags:
+        - Ads
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name_ads:
+                  type: string
+                  description: The name of the advertisement
+                speaker:
+                  type: string
+                  description: The speaker for the advertisement
+                  required: true
+                description:
+                  type: string
+                  description: The description of the advertisement
+                  required: true
+                is_preview:
+                  type: boolean
+                  description: Flag to indicate if this is a preview
+                  default: false
+                image_file:
+                  type: string
+                  format: binary
+                  description: The image file (PNG, JPG, JPEG, SVG)
+      responses:
+        200:
+          description: Successfully inserted advertisement
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      image:
+                        type: string
+                      audio:
+                        type: string
+        400:
+          description: Bad Request
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unauthorization Token."
+        403:
+          description: Forbidden
+
+  /delete_ads:
+    delete:
+      summary: Delete
+      description: Deletes an advertisement by ID
+      tags:
+        - Ads
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: ads_id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully deleted advertisement
+        400:
+          description: Bad Request
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unauthorization Token."
+        403:
+          description: Forbidden
+
+  /update:
+    put:
+      summary: Update
+      description: Updates an advertisement with a new image and details
+      tags:
+        - Ads
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: ads_id
+          in: query
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                name_ads:
+                  type: string
+                speaker:
+                  type: string
+                  required: true
+                description:
+                  type: string
+                  required: true
+                image_file:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          description: Successfully updated advertisement
+        400:
+          description: Bad Request
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Unauthorization Token."
+        403:
+          description: Forbidden
+
+  /getall_ads:
+    get:
+      summary: Get all
+      description: Retrieves a list of all advertisements
+      tags:
+        - Ads
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description: List of advertisements
+        403:
+          description: Forbidden
+
+  /find_one:
+    get:
+      summary: Find_one
+      description: Retrieves a single advertisement by ID
+      tags:
+        - Ads
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: ads_id
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Retrieved advertisement successfully
+        400:
+          description: Bad Request
+        403:
+          description: Forbidden
+
+  /find_one_random:
+    get:
+      summary: Find_one_random
+      description: Retrieves a randomly selected advertisement
+      tags:
+        - Ads
+      security:
+        - BearerAuth: []
+      responses:
+        200:
+          description: Successfully retrieved a random advertisement
+        403:
+          description: Forbidden
