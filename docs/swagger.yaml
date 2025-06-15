@@ -1,213 +1,459 @@
 openapi: 3.0.0
 info:
-  title: Ads API
-  description: API for managing advertisements
-  version: 1.0.0
+  title: SPEC API blog backend service
+  version: "1.0"
 servers:
-  - url: http://localhost:7300/api/ads
+  - url: /api
+paths:
+  /blog/get_all_blog:
+    get:
+      tags:
+        - Blog
+      summary: get_all_blog
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: string
+          required: true
+          description: Page number, e.g., `1`
+        - in: query
+          name: limit
+          schema:
+            type: string
+          required: true
+          description: Number of items per page, e.g., `10`
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                message: success
+  /blog/insert_blog:
+    post:
+      tags:
+        - Blog
+      summary: insert_blog
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Blog title, e.g., `My First Blog`
+                content:
+                  type: string
+                  description: |
+                    Content in HTML format. For example:
+                    ```html
+                    <h1>Topic</h1>
+                    <p>This is a sample message in HTML format</p>
+                    ```
+                  example: "<h1>Topic</h1><p>This is a sample message in HTML format</p>"
+                category:
+                  type: string
+                  description: event or article 
+                tag:
+                  type: string
+                  description:  Go2,Programming2
+                type:
+                  type: string
+                  description:  Tutorial,News
+                location:
+                  type: string
+                  description:  Thailand
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                message: Blog created successfully
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                message: Failed to create blog
+  /blog/update_blog:
+    put:
+      tags:
+        - Blog
+      summary: update_blog
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: blog_id
+          schema:
+            type: string
+          required: true
+          description: Blog ID to update, e.g., `1`
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Updated title, e.g., `Updated Blog Title`
+                content:
+                  type: string
+                  description: |
+                    Updated content in HTML format. For example:
+                    ```html
+                    <h1>Updated Topic</h1>
+                    <p>This is updated content.</p>
+                    ```
+                  example: "<h1>Updated Topic</h1><p>This is updated content.</p>"
+                category:
+                  type: string
+                  description: Updated category  event or article 
+                tag:
+                  type: string
+                  description: Updated tags, e.g., Go2,Programming2
+                type:
+                  type: string
+                  description: Updated blog type, e.g., Tutorial,News
+                location:
+                  type: string
+                  description: Updated location, e.g., Thailand
+                highlight_id:
+                  type: string
+                  description: highlight_i of the blog
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                message: Blog updated successfully
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                message: Failed to update blog
+  /blog/delete_blog:
+    delete:
+      tags:
+        - Blog
+      summary: delete_blog
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: blog_id
+          schema:
+            type: string
+          required: true
+          description: Blog ID to delete, e.g., `1`
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                message: Blog deleted successfully
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                message: Failed to delete blog
+  /blog/upload_image:
+    post:
+      tags:
+        - Blog
+      summary: upload_image
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: blog_id
+          schema:
+            type: string
+          required: true
+          description: Blog ID to upload the image, e.g., `1`
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image_file:
+                  type: string
+                  format: binary
+                  description: Image file to upload .svg
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                message: Blog image uploaded successfully
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                message: Failed to upload image
+  /blog/get_blog:
+    get:
+      tags:
+        - Blog
+      summary: get_blog
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: blog_id
+          schema:
+            type: string
+          required: true
+          description: Blog ID to retrieve, e.g., `1`
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              example:
+                message: success
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              example:
+                message: Blog not found
+  /highlightevent/insert:
+    post:
+      tags:
+        - Highlightevent
+      summary: Insert
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Title of the event
+              
+                location:
+                  type: string
+                  description: Location of the event
+                date:
+                  type: string
+                  format: date
+                  description: Date of the event (YYYY-MM-DD)
+                category:
+                  type: string
+                  description: Category of the event
+               
+                highlight_id:
+                  type: string
+                  description: Unique ID for the highlight event
+                speaker:
+                  type: string
+                  description: Speaker(s) of the event
+                location_event:
+                  type: string
+                  description: Specific location or venue of the event
+                imagefile:
+                  type: string
+                  format: binary
+                  description: Image file to upload .svg
+      responses:
+        "200":
+          description: Successfully inserted highlight event
+          content:
+            application/json:
+              example:
+                message: Success
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              example:
+                message: Missing required fields
+  /highlightevent/update:
+    put:
+      tags:
+        - Highlightevent
+      summary: Update
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: highlight_id
+          schema:
+            type: string
+          required: true
+          description: Unique ID of the highlight event to update
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: Updated title of the event
+               
+                location:
+                  type: string
+                  description: Updated location of the event
+                date:
+                  type: string
+                  format: date
+                  description: Updated date of the event (YYYY-MM-DD)
+                category:
+                  type: string
+                  description: Updated category of the event
+               
+                speaker:
+                  type: string
+                  description: Updated speaker(s) of the event
+                location_event:
+                  type: string
+                  description: Updated specific location or venue of the event
+                imagefile:
+                  type: string
+                  format: binary
+                  description: Optional updated image file for the event
+      responses:
+        "200":
+          description: Successfully updated highlight event
+          content:
+            application/json:
+              example:
+                message: Update successful
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              example:
+                message: highlight_id is required
+  /highlightevent/delete:
+    delete:
+      tags:
+        - Highlightevent
+      summary: Delete
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: highlight_id
+          schema:
+            type: string
+          required: true
+          description: Unique ID of the highlight event to delete
+      responses:
+        "200":
+          description: Successfully deleted highlight event
+          content:
+            application/json:
+              example:
+                message: Delete successful
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              example:
+                message: highlight_id is required
+  /highlightevent/get_all:
+    get:
+      tags:
+        - Highlightevent
+      summary: Get_all
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: string
+          required: false
+          description: Page number, defaults to 1
+        - in: query
+          name: limit
+          schema:
+            type: string
+          required: false
+          description: Number of items per page, defaults to 10
+      responses:
+        "200":
+          description: Successfully retrieved all highlight events
+          content:
+            application/json:
+              example:
+                message: success
+                data: []
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                message: Failed to get all highlight events
+  /highlightevent/get_one:
+    get:
+      tags:
+        - Highlightevent
+      summary: Get_One
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: query
+          name: highlight_id
+          schema:
+            type: string
+          required: true
+          description: Unique ID of the highlight event to retrieve
+      responses:
+        "200":
+          description: Successfully retrieved highlight event
+          content:
+            application/json:
+              example:
+                message: success
+                data: {}
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              example:
+                message: highlight_id is required
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              example:
+                message: highlight not found
 components:
   securitySchemes:
-    BearerAuth:
+    bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
-security:
-  - BearerAuth: []
-paths:
-  /insert_ads:
-    post:
-      summary: Insert
-      description: Inserts a new advertisement with an image file
-      tags:
-        - Ads
-      security:
-        - BearerAuth: []
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                name_ads:
-                  type: string
-                  description: The name of the advertisement
-                speaker:
-                  type: string
-                  description: The speaker for the advertisement
-                  required: true
-                description:
-                  type: string
-                  description: The description of the advertisement
-                  required: true
-                is_preview:
-                  type: boolean
-                  description: Flag to indicate if this is a preview
-                  default: false
-                image_file:
-                  type: string
-                  format: binary
-                  description: The image file (PNG, JPG, JPEG, SVG)
-      responses:
-        200:
-          description: Successfully inserted advertisement
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                  data:
-                    type: object
-                    properties:
-                      image:
-                        type: string
-                      audio:
-                        type: string
-        400:
-          description: Bad Request
-        401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Unauthorization Token."
-        403:
-          description: Forbidden
-
-  /delete_ads:
-    delete:
-      summary: Delete
-      description: Deletes an advertisement by ID
-      tags:
-        - Ads
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: ads_id
-          in: query
-          required: true
-          schema:
-            type: string
-      responses:
-        200:
-          description: Successfully deleted advertisement
-        400:
-          description: Bad Request
-        401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Unauthorization Token."
-        403:
-          description: Forbidden
-
-  /update:
-    put:
-      summary: Update
-      description: Updates an advertisement with a new image and details
-      tags:
-        - Ads
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: ads_id
-          in: query
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                name_ads:
-                  type: string
-                speaker:
-                  type: string
-                  required: true
-                description:
-                  type: string
-                  required: true
-                image_file:
-                  type: string
-                  format: binary
-      responses:
-        200:
-          description: Successfully updated advertisement
-        400:
-          description: Bad Request
-        401:
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: "Unauthorization Token."
-        403:
-          description: Forbidden
-
-  /getall_ads:
-    get:
-      summary: Get all
-      description: Retrieves a list of all advertisements
-      tags:
-        - Ads
-      security:
-        - BearerAuth: []
-      responses:
-        200:
-          description: List of advertisements
-        403:
-          description: Forbidden
-
-  /find_one:
-    get:
-      summary: Find_one
-      description: Retrieves a single advertisement by ID
-      tags:
-        - Ads
-      security:
-        - BearerAuth: []
-      parameters:
-        - name: ads_id
-          in: query
-          required: true
-          schema:
-            type: string
-      responses:
-        200:
-          description: Retrieved advertisement successfully
-        400:
-          description: Bad Request
-        403:
-          description: Forbidden
-
-  /find_one_random:
-    get:
-      summary: Find_one_random
-      description: Retrieves a randomly selected advertisement
-      tags:
-        - Ads
-      security:
-        - BearerAuth: []
-      responses:
-        200:
-          description: Successfully retrieved a random advertisement
-        403:
-          description: Forbidden
+      description: JWT Authorization header using the Bearer scheme.
+tags:
+  - name: Blog
+    description: APIs for managing Blog.
+  - name: Highlightevent
+    description: APIs for managing Highlightevent.

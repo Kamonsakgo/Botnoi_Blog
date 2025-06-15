@@ -1,8 +1,8 @@
 package middlewares
 
 import (
-	"bn-crud-ads/domain/entities"
 	"fmt"
+	"go-fiber-unittest/domain/entities"
 	"log"
 	"net/http"
 	"os"

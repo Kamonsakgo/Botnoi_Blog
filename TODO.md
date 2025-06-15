@@ -1,3 +1,0 @@
-- เส้น `api/payment/update_ads`
-  - [x] เช็ค authorization
-  - [x] อัพเดทข้อมูลได้แล้ว

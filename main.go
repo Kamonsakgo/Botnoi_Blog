@@ -1,13 +1,13 @@
 package main
 
 import (
-	"bn-crud-ads/configuration"
-	ds "bn-crud-ads/domain/datasources"
-	repo "bn-crud-ads/domain/repositories"
-	gw "bn-crud-ads/src/gateways"
-	"bn-crud-ads/src/middlewares"
-	sv "bn-crud-ads/src/services"
-	"bn-crud-ads/utils/providers"
+	"go-fiber-unittest/configuration"
+	ds "go-fiber-unittest/domain/datasources"
+	repo "go-fiber-unittest/domain/repositories"
+	gw "go-fiber-unittest/src/gateways"
+	"go-fiber-unittest/src/middlewares"
+	sv "go-fiber-unittest/src/services"
+	"go-fiber-unittest/src/utils/providers"
 	"log"
 	"os"
 
@@ -20,14 +20,14 @@ import (
 
 func main() {
 
-	// // // remove this before deploy ###################
+	// // remove this before deploy ###################
 	err := godotenv.Load()
 	if err != nil {
 		log.Fatal("Error loading .env file")
 	}
-	// /// ############################################
-
+	/// ############################################
 	app := fiber.New(configuration.NewFiberConfiguration())
+
 	app.Use("/api/admin/docs", func(c *fiber.Ctx) error {
 		htmlContent, err := scalar.ApiReferenceHTML(&scalar.Options{
 			SpecURL: "./docs/swagger.yaml",
@@ -44,25 +44,25 @@ func main() {
 		c.Type("html")
 		return c.SendString(htmlContent)
 	})
-	middlewares.Logger(app)
+	app.Use(middlewares.NewLogger())
 	app.Use(recover.New())
 	app.Use(cors.New())
 
 	mongodb := ds.NewMongoDB(10)
-	redisdb := ds.NewRedisConnection()
 
-	adsMongo := repo.NewAdsRepository(mongodb)
-	ads_redis := repo.NewRedisRepository(redisdb)
-	wrongMessageRepo := repo.NewWrongMessageRepository(mongodb)
+	userMongo := repo.NewUsersRepository(mongodb)
+	blogMongo := repo.NewBlogsRepository(mongodb)
+	highlighteventMongo := repo.NewHighlightsRepository(mongodb)
+	sv0 := sv.NewUsersService(userMongo)
+	blog := sv.NewBlogsService(blogMongo, userMongo, providers.NewS3Provider())
+	highlightevent := sv.NewHighlightsService(highlighteventMongo, userMongo, providers.NewS3Provider())
 
-	sv0 := sv.NewAdsService(adsMongo, ads_redis, providers.NewS3Provider(), wrongMessageRepo)
-
-	gw.NewHTTPGateway(app, sv0)
+	gw.NewHTTPGateway(app, sv0, blog, highlightevent)
 
 	PORT := os.Getenv("PORT")
 
 	if PORT == "" {
-		PORT = "7300"
+		PORT = "8080"
 	}
 
 	app.Listen(":" + PORT)

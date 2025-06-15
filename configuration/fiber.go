@@ -8,7 +8,7 @@ import (
 
 func NewFiberConfiguration() fiber.Config {
 	return fiber.Config{
-		AppName:     "ADS SVC",
+		AppName:     ")϶ go-fiber-unittest ϵ(",
 		JSONEncoder: json.Marshal,
 		JSONDecoder: json.Unmarshal,
 	}

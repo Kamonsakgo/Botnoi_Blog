@@ -1,21 +1,19 @@
-FROM golang:alpine as build-env
-ENV CGO_ENABLED=0
-ENV GO111MODULE=on
-WORKDIR $GOPATH/src/bn-crud-ads
+# Use the official Go image as the base image
+FROM golang:1.22.1-alpine
 
-COPY . .
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the application files into the working directory
+COPY . /app
 
 RUN go mod download
 
-RUN go build
+# Build the application
+RUN go build -o main .
 
+# Expose port 8080
+EXPOSE 8080
 
-FROM scratch
-
-# Copy our static executable.
-COPY --from=build-env /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
-COPY --from=build-env /go/src/bn-crud-ads/bn-crud-ads /go/src/bn-crud-ads/bn-crud-ads
-
-# Run the hello binary.
-ENTRYPOINT ["/go/src/bn-crud-ads/bn-crud-ads"]
-
+# Define the entry point for the container
+CMD ["./main"]
