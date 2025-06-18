@@ -23,8 +23,8 @@
 
 1. โคลนโปรเจกต์:
    ```bash
-   git clone https://github.com/yourusername/your-repository.git
-   cd your-repository
+   git clone https://github.com/Kamonsakgo/Botnoi_Blog.git
+   cd Botnoi_Blog
    ```
 
 2. ติดตั้ง dependencies:
