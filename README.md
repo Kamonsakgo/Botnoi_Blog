@@ -93,9 +93,6 @@ Authorization: Bearer <your-jwt-token>
 }
 ```
 
-## ไลเซนส์
-
-โปรเจกต์นี้ใช้ MIT License - ดูรายละเอียดในไฟล์ [LICENSE](LICENSE)
 
 ## ขอบคุณ
 
