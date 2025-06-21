@@ -40,7 +40,7 @@ Botnoi_Blog/
 
 1. **Clone โปรเจ็ค**
 ```bash
-git clone <repository-url>
+git clone https://github.com/Kamonsakgo/Botnoi_Blog.git
 cd Botnoi_Blog
 ```
 
@@ -101,17 +101,7 @@ go test ./src/services/...
 go test ./tests/...
 ```
 
-## Docker
 
-### สร้าง Docker Image
-```bash
-docker build -t botnoi-blog-api .
-```
-
-### รัน Docker Container
-```bash
-docker run -p 8080:8080 --env-file .env botnoi-blog-api
-```
 
 ## การพัฒนา
 
